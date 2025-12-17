@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "山田 太郎",
+      "email": "taro.yamada@example.com",
+      "role": "Admin",
+      "status": "active",
+      "createdAt": "2024-04-01"
+    },
+    {
+      "id": 2,
+      "name": "佐藤 花子",
+      "email": "hanako.sato@example.com",
+      "role": "Editor",
+      "status": "inactive",
+      "createdAt": "2024-05-12"
+    },
+    {
+      "id": 3,
+      "name": "鈴木 一郎",
+      "email": "ichiro.suzuki@example.com",
+      "role": "Viewer",
+      "status": "active",
+      "createdAt": "2024-06-20"
+    },
+    {
+      "id": 4,
+      "name": "高橋 美咲",
+      "email": "misaki.takahashi@example.com",
+      "role": "Editor",
+      "status": "active",
+      "createdAt": "2024-07-02"
+    },
+    {
+      "id": 5,
+      "name": "伊藤 健",
+      "email": "ken.ito@example.com",
+      "role": "Viewer",
+      "status": "inactive",
+      "createdAt": "2024-08-15"
+    }
+  ]
+}
