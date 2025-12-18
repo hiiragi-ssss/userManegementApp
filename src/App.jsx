@@ -4,6 +4,11 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function SearchForm(props){
+  const [nameInput, setNameInput] = useState("");
+
+  const handleNameChange = (e) => {
+      setNameInput(e.currentTarget.value);
+  }
     // 登録ボタンが押されたらエラーを出すか、inputの値を描画するためにsetする
   const handleOnSearch = (e) => {
     e.preventDefault();
@@ -11,8 +16,12 @@ function SearchForm(props){
         alert(`名前が入力されていません`);
         return;
     }
-    props.onSearch(nameInput,);
-    setTimeInput('');
+    props.onSearch(nameInput);
+  }
+  const handleOnReset = (e) => {
+    e.preventDefault();
+    props.onReset();
+    setNameInput('');
   }
   return (
     <>
@@ -26,7 +35,8 @@ function SearchForm(props){
           onChange={handleNameChange}
           />
           {/* ボタンが押されたら */}
-          <button className="searchButton" onClick={handleOnSearch}>登録</button>
+          <button className="searchButton" onClick={handleOnSearch}>検索</button>
+          <button className="resetButton" onClick={handleOnReset}>リセット</button>
       </section>
     </>
   );
@@ -42,9 +52,9 @@ function User(props) {
 
     return(
     <>
-      <section className="user">
+      <section className={`${props.user.status}`}>
         <div>
-          userStatus
+          {props.user.status}
           <input
             type="checkbox"
             checked={props.user.status === "active"}
@@ -63,6 +73,7 @@ function User(props) {
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     fetch("http://localhost:3000/users")
       .then((res) => res.json())
@@ -83,9 +94,13 @@ function App() {
       setUsers(newUsers);
   };
 
-  // const handleSearchForm = (nameInput){
-  //   const newUsers = users;
-  // }
+  // 検索用
+  const handleSearchForm = (nameInput) => {
+    setSearchTerm(nameInput);
+  }
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // 削除ボタン用
   const handleUserDeleteClick = (id) => {
@@ -97,8 +112,11 @@ function App() {
       });
       setUsers(newUsers);
   };
+  const handleReset = () => {
+    setSearchTerm('');
+  }
 
-  const userItems = users.map((user) => {
+  const userItems = filteredUsers.map((user) => {
     return (
       <User
           key={user.id}
@@ -113,7 +131,9 @@ function App() {
   return (
     <>
     <main>
-      {/* <SearchForm onSearch = {handleSearchForm} /> */}
+      <SearchForm
+      onSearch = {handleSearchForm}
+      onReset = {handleReset} />
       {userItems}
     </main>
     </>
