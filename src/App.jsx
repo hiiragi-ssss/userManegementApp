@@ -3,13 +3,15 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+// 検索フォームコンポーネント
 function SearchForm(props){
   const [nameInput, setNameInput] = useState("");
 
+  // inputの値が変化したら再表示
   const handleNameChange = (e) => {
       setNameInput(e.currentTarget.value);
   }
-    // 登録ボタンが押されたらエラーを出すか、inputの値を描画するためにsetする
+    // 登録ボタンが押されたらエラーを出すか、名前の検索をかける
   const handleOnSearch = (e) => {
     e.preventDefault();
     if (nameInput === ``) {
@@ -18,6 +20,7 @@ function SearchForm(props){
     }
     props.onSearch(nameInput);
   }
+  // リセットボタン
   const handleOnReset = (e) => {
     e.preventDefault();
     props.onReset();
@@ -42,44 +45,52 @@ function SearchForm(props){
   );
 }
 
+// ユーザーコンポーネント
 function User(props) {
-    const handleCheckboxChange = () => {
-        props.onCheckboxChange(props.user.id);
-    };
-    const handleDeleteClick = () => {
-      props.onDeleteClick(props.user.id);
-    };
+  // チェックボックス用
+  const handleCheckboxChange = () => {
+      props.onCheckboxChange(props.user.id);
+  };
+  // 削除ボタン
+  const handleDeleteClick = () => {
+    props.onDeleteClick(props.user.id);
+  };
 
-    return(
-    <>
-      <section className={`${props.user.status}`}>
-        <div>
-          {props.user.status}
-          <input
-            type="checkbox"
-            checked={props.user.status === "active"}
-            onChange={handleCheckboxChange}
-          />
-        </div>
-        <div className="name">{props.user.name}</div>
-        <div className="email">{props.user.email}</div>
-        <div className="role">{props.user.role}</div>
-        <div className="createdAt">{props.user.createdAt}</div>
-        <button className="deleteButton" onClick={handleDeleteClick}>削除</button>
-      </section>
-    </>
+  return(
+  <>
+    {/* inactiveなら背景がグレー */}
+    <section className={`${props.user.status}`}>
+      <div>
+        {props.user.status}
+        <input
+          type="checkbox"
+          checked={props.user.status === "active"}
+          onChange={handleCheckboxChange}
+        />
+      </div>
+      <div className="name">{props.user.name}</div>
+      <div className="email">{props.user.email}</div>
+      <div className="role">{props.user.role}</div>
+      <div className="createdAt">{props.user.createdAt}</div>
+      <button className="deleteButton" onClick={handleDeleteClick}>削除</button>
+    </section>
+  </>
   );
 }
 
+// 総表示コンポーネント
 function App() {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // jsonサーバーから要素取得、取得した要素はusersに入る
   useEffect(() => {
     fetch("http://localhost:3000/users")
       .then((res) => res.json())
       .then((data) => setUsers(data));
   }, []);
 
+  // チェックボックスでactiveとinactiveの文字列を切り替えるためのコード
   const handleUserCheckboxChange = (id) => {
       const newUsers = users.map((user) => {
           return {
@@ -116,6 +127,7 @@ function App() {
     setSearchTerm('');
   }
 
+  // 配列状のfilterUsersを展開
   const userItems = filteredUsers.map((user) => {
     return (
       <User
